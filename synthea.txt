@@ -1,0 +1,170 @@
+CREATE TABLE `allergies` (
+  `START_DATE` date DEFAULT NULL,
+  `END_DATE` date DEFAULT NULL,
+  `PATIENT_ID` varchar(256) DEFAULT NULL,
+  `ENCOUNTER_ID` varchar(256) DEFAULT NULL,
+  `CODE` varchar(16) DEFAULT NULL,
+  `DESCRIPTION` varchar(256) DEFAULT NULL,
+  KEY `PATIENT_ID` (`PATIENT_ID`),
+  KEY `ENCOUNTER_ID` (`ENCOUNTER_ID`),
+  CONSTRAINT `allergies_ibfk_1` FOREIGN KEY (`PATIENT_ID`) REFERENCES `patients` (`ID`),
+  CONSTRAINT `allergies_ibfk_2` FOREIGN KEY (`ENCOUNTER_ID`) REFERENCES `encounters` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Patient allergy data.';
+
+
+CREATE TABLE `careplans` (
+  `ID` varchar(256) NOT NULL,
+  `START_DATE` date DEFAULT NULL,
+  `END_DATE` date DEFAULT NULL,
+  `PATIENT_ID` varchar(256) DEFAULT NULL,
+  `ENCOUNTER_ID` varchar(256) DEFAULT NULL,
+  `CODE` varchar(16) DEFAULT NULL,
+  `DESCRIPTION` varchar(256) DEFAULT NULL,
+  `REASON_CODE` varchar(16) DEFAULT NULL,
+  `REASON_DESCRIPTION` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `PATIENT_ID` (`PATIENT_ID`),
+  KEY `ENCOUNTER_ID` (`ENCOUNTER_ID`),
+  CONSTRAINT `careplans_ibfk_1` FOREIGN KEY (`PATIENT_ID`) REFERENCES `patients` (`ID`),
+  CONSTRAINT `careplans_ibfk_2` FOREIGN KEY (`ENCOUNTER_ID`) REFERENCES `encounters` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Patient careplans data.';
+
+CREATE TABLE `conditions` (
+  `START_DATE` date DEFAULT NULL,
+  `END_DATE` date DEFAULT NULL,
+  `PATIENT_ID` varchar(256) DEFAULT NULL,
+  `ENCOUNTER_ID` varchar(256) DEFAULT NULL,
+  `CODE` varchar(16) DEFAULT NULL,
+  `DESCRIPTION` varchar(256) DEFAULT NULL,
+  KEY `PATIENT_ID` (`PATIENT_ID`),
+  KEY `ENCOUNTER_ID` (`ENCOUNTER_ID`),
+  CONSTRAINT `conditions_ibfk_1` FOREIGN KEY (`PATIENT_ID`) REFERENCES `patients` (`ID`),
+  CONSTRAINT `conditions_ibfk_2` FOREIGN KEY (`ENCOUNTER_ID`) REFERENCES `encounters` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Patient conditions or diagnoses.';
+
+CREATE TABLE `encounters` (
+  `ID` varchar(256) NOT NULL,
+  `START_DATE` timestamp NULL DEFAULT NULL,
+  `END_DATE` timestamp NULL DEFAULT NULL,
+  `PATIENT_ID` varchar(256) NOT NULL,
+  `ENCOUNTER_CLASS` varchar(32) DEFAULT NULL,
+  `CODE` varchar(16) DEFAULT NULL,
+  `DESCRIPTION` varchar(256) DEFAULT NULL,
+  `COST` varchar(16) DEFAULT NULL,
+  `REASON_CODE` varchar(16) DEFAULT NULL,
+  `REASON_DESCRIPTION` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `PATIENT_ID` (`PATIENT_ID`),
+  CONSTRAINT `encounters_ibfk_1` FOREIGN KEY (`PATIENT_ID`) REFERENCES `patients` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Patient encounter data.';
+
+CREATE TABLE `imaging_studies` (
+  `ID` varchar(256) NOT NULL,
+  `DATE` date DEFAULT NULL,
+  `PATIENT_ID` varchar(256) DEFAULT NULL,
+  `ENCOUNTER_ID` varchar(256) DEFAULT NULL,
+  `BODY_SITE_CODE` varchar(32) DEFAULT NULL,
+  `BODY_SITE_DESC` varchar(256) DEFAULT NULL,
+  `MODALITY_CODE` varchar(32) DEFAULT NULL,
+  `MODALITY_CODE_DESC` varchar(256) DEFAULT NULL,
+  `SOP_CODE` varchar(32) DEFAULT NULL,
+  `SOP_DESC` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `PATIENT_ID` (`PATIENT_ID`),
+  KEY `ENCOUNTER_ID` (`ENCOUNTER_ID`),
+  CONSTRAINT `imaging_studies_ibfk_1` FOREIGN KEY (`PATIENT_ID`) REFERENCES `patients` (`ID`),
+  CONSTRAINT `imaging_studies_ibfk_2` FOREIGN KEY (`ENCOUNTER_ID`) REFERENCES `encounters` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Patient imaging metadata.';
+
+CREATE TABLE `immunizations` (
+  `DATE` date DEFAULT NULL,
+  `PATIENT_ID` varchar(256) DEFAULT NULL,
+  `ENCOUNTER_ID` varchar(256) DEFAULT NULL,
+  `CODE` varchar(8) DEFAULT NULL,
+  `CODE_DESC` varchar(256) DEFAULT NULL,
+  `COST` varchar(8) DEFAULT NULL,
+  KEY `PATIENT_ID` (`PATIENT_ID`),
+  KEY `ENCOUNTER_ID` (`ENCOUNTER_ID`),
+  CONSTRAINT `immunizations_ibfk_1` FOREIGN KEY (`PATIENT_ID`) REFERENCES `patients` (`ID`),
+  CONSTRAINT `immunizations_ibfk_2` FOREIGN KEY (`ENCOUNTER_ID`) REFERENCES `encounters` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Patient immunization data.';
+
+CREATE TABLE `medications` (
+  `START_DATE` date DEFAULT NULL,
+  `END_DATE` date DEFAULT NULL,
+  `PATIENT_ID` varchar(256) DEFAULT NULL,
+  `ENCOUNTER_ID` varchar(256) DEFAULT NULL,
+  `CODE` varchar(16) DEFAULT NULL,
+  `DESCRIPTION` varchar(256) DEFAULT NULL,
+  `COST` varchar(8) DEFAULT NULL,
+  `REASON_CODE` varchar(16) DEFAULT NULL,
+  `REASON_DESCRIPTION` varchar(256) DEFAULT NULL,
+  KEY `PATIENT_ID` (`PATIENT_ID`),
+  KEY `ENCOUNTER_ID` (`ENCOUNTER_ID`),
+  CONSTRAINT `medications_ibfk_1` FOREIGN KEY (`PATIENT_ID`) REFERENCES `patients` (`ID`),
+  CONSTRAINT `medications_ibfk_2` FOREIGN KEY (`ENCOUNTER_ID`) REFERENCES `encounters` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Patient medication data.';
+
+CREATE TABLE `observations` (
+  `DATE` date DEFAULT NULL,
+  `PATIENT_ID` varchar(256) DEFAULT NULL,
+  `ENCOUNTER_ID` varchar(256) DEFAULT NULL,
+  `CODE` varchar(8) DEFAULT NULL,
+  `CODE_DESC` varchar(256) DEFAULT NULL,
+  `VALUE` varchar(8) DEFAULT NULL,
+  `UNITS` varchar(8) DEFAULT NULL,
+  `TYPE` varchar(8) DEFAULT NULL,
+  KEY `PATIENT_ID` (`PATIENT_ID`),
+  KEY `ENCOUNTER_ID` (`ENCOUNTER_ID`),
+  CONSTRAINT `observations_ibfk_1` FOREIGN KEY (`PATIENT_ID`) REFERENCES `patients` (`ID`),
+  CONSTRAINT `observations_ibfk_2` FOREIGN KEY (`ENCOUNTER_ID`) REFERENCES `encounters` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Patient observation data.';
+
+CREATE TABLE `patients` (
+  `ID` varchar(256) NOT NULL,
+  `BIRTH_DATE` date DEFAULT NULL,
+  `DEATH_DATE` date DEFAULT NULL,
+  `SSN` varchar(16) DEFAULT NULL,
+  `DRIVER_LICENCE` varchar(16) DEFAULT NULL,
+  `PASSPORT` varchar(16) DEFAULT NULL,
+  `PREFIX` varchar(8) DEFAULT NULL,
+  `FIRST_NAME` varchar(32) DEFAULT NULL,
+  `LAST_NAME` varchar(32) DEFAULT NULL,
+  `SUFFIX` varchar(8) DEFAULT NULL,
+  `MAIDEN_NAME` varchar(32) DEFAULT NULL,
+  `MARITAL_STATUS` varchar(2) DEFAULT NULL,
+  `RACE` varchar(32) DEFAULT NULL,
+  `ETHNICITY` varchar(32) DEFAULT NULL,
+  `GENDER` varchar(2) DEFAULT NULL,
+  `BIRTH_PLACE` varchar(16) DEFAULT NULL,
+  `ADDRESS` varchar(48) DEFAULT NULL,
+  `CITY` varchar(16) DEFAULT NULL,
+  `STATE` varchar(32) DEFAULT NULL,
+  `ZIP` varchar(16) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `procedures` (
+  `DATE` date DEFAULT NULL,
+  `PATIENT_ID` varchar(256) DEFAULT NULL,
+  `ENCOUNTER_ID` varchar(256) DEFAULT NULL,
+  `CODE` varchar(16) DEFAULT NULL,
+  `DESCRIPTION` varchar(256) DEFAULT NULL,
+  `COST` varchar(8) DEFAULT NULL,
+  `REASON_CODE` varchar(16) DEFAULT NULL,
+  `REASON_DESCRIPTION` varchar(256) DEFAULT NULL,
+  KEY `PATIENT_ID` (`PATIENT_ID`),
+  KEY `ENCOUNTER_ID` (`ENCOUNTER_ID`),
+  CONSTRAINT `procedures_ibfk_1` FOREIGN KEY (`PATIENT_ID`) REFERENCES `patients` (`ID`),
+  CONSTRAINT `procedures_ibfk_2` FOREIGN KEY (`ENCOUNTER_ID`) REFERENCES `encounters` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Patient allergy data.';
+
+
+
+
+
+
+
+
+
+
